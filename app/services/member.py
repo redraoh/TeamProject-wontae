@@ -10,7 +10,9 @@ class MemberService():
         data = mdto.model_dump()
         mb = Member(**data)
         data = {'userid': mb.userid, 'passwd': mb.passwd, 'zipcode': mb.zipcode, 'address1': mb.address1, 'address2': mb.address2,
-                'name': mb.name, 'mobile1': mb.phone, 'mobile2': mb.phone, 'email': mb.email}
+                'name': mb.name, 'phone': mb.phone, 'email': mb.email}
+
+
         return data
 
     @staticmethod

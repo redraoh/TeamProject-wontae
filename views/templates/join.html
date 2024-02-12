@@ -3,7 +3,7 @@
 {% block style %}
 
 <style>
-    form { width: 500px; margin: 150px auto; }
+    form { width: 500px; margin: 170px auto; }
     form div { margin-bottom: 5px; }
     form label { font-weight: bold; width: 110px; text-align: right; }
     form button:first-child { margin-left: 100px; }
@@ -180,10 +180,26 @@
     let nameInput = document.querySelector('#name');
     let emailInput = document.querySelector('#email');
     let address2Input = document.querySelector('#address2');
-    let phoneInput = document.querySelector('#mobile2');
-
+    let mobileInput = document.querySelector('#mobile2');
+    // phone 요소 가져오기
+    let phoneInput = document.querySelector('#phone');
 
     let joinfrm = document.joinfrm;
+
+    // mobile1과 mobile2 요소 가져오기
+    let mobile1Input = document.querySelector('#mobile1');
+    let mobile2Input = document.querySelector('#mobile2');
+
+    // mobile1과 mobile2의 값이 변경될 때마다 phone의 값을 업데이트하는 함수 정의
+    let updatePhone = () => {
+        phoneInput.value = mobile1Input.value + mobile2Input.value;
+    };
+
+    // mobile1과 mobile2의 값이 변경될 때마다 updatePhone 함수 호출
+    mobile1Input.addEventListener('blur', updatePhone);
+    mobile2Input.addEventListener('blur', updatePhone);
+
+
 
     // 입력 필드와 메시지 요소 초기화 함수
     let resetFieldAndMessage = (inputElement, messageElement) => {
@@ -220,7 +236,7 @@
         resetFieldAndMessage(repwdInput, msg3);
         resetFieldAndMessage(address2Input, msgAdd);
         resetFieldAndMessage(nameInput, msg4);
-        resetFieldAndMessage(phoneInput, msgNum);
+        resetFieldAndMessage(mobileInput, msgNum);
         resetFieldAndMessage(emailInput, msg5);
 
         if (useridInput.value === '') {
@@ -243,9 +259,9 @@
             showMessage(nameInput, msg4, '이름을 입력하세요');
             nameInput.focus();
             return false;
-        } else if (phoneInput.value === '') {
-            showMessage(phoneInput, msgNum, '전화번호를 입력하세요');
-            phoneInput.focus();
+        } else if (mobileInput.value === '') {
+            showMessage(mobileInput, msgNum, '전화번호를 입력하세요');
+            mobileInput.focus();
             return false;
         } else if (emailInput.value === '') {
             showMessage(emailInput, msg5, '이메일을 입력하세요');
@@ -253,7 +269,7 @@
             return false;
         } else {
             joinfrm.method = 'post';
-            joinfrm.action = 'server/join';
+            joinfrm.action = 'http://127.0.0.1:8000/join';
             return true; // 작성한 데이터를 서버로 요청
         }
     };
@@ -316,7 +332,6 @@
             showMessage(emailInput, msg5, result);
         }
     };
-
 
 
 </script>
