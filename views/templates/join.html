@@ -13,7 +13,7 @@
 {% block main %}
 <main>
     <h2>회원가입</h2>
-    <form name="joinfrm" onsubmit="return checkForm()">
+    <form name="joinfrm">
         <div class="row">
             <!-- 중복확인 버튼 만들기-->
             <div class="col-auto"><label for="userid" class="col-form-label">아이디</label></div>
@@ -38,11 +38,11 @@
         </div>
         <div class="row">
             <div class="col-auto"><label for="zipcode" class="col-form-label">우편번호</label></div>
-            <div class="col-auto"><input type="text" id="zipcode" class="form-control" style="width: 100px" readonly></div>
+            <div class="col-auto"><input type="text" name="zipcode" id="zipcode" class="form-control" style="width: 100px" readonly></div>
         </div>
         <div class="row">
             <div class="col-auto"><label for="address1" class="col-form-label">주소</label></div>
-            <div class="col-auto"><input type="text" id="address1" placeholder="" class="form-control" style="width: 200px"></div>
+            <div class="col-auto"><input type="text" name="address1" id="address1" placeholder="" class="form-control" style="width: 200px" readonly></div>
         </div>
         <div class="row">
             <div class="col-auto"><label for="extraAddress" class="col-form-label"></label></div>
@@ -50,7 +50,7 @@
         </div>
         <div class="row">
             <div class="col-auto"><label for="address2" class="col-form-label">상세주소 입력</label></div>
-            <div class="col-auto"><input type="text" id="address2" class="form-control" style="width: 200px"><span id="msgAdd"></span></div>
+            <div class="col-auto"><input type="text" name="address2" id="address2" class="form-control" style="width: 200px"><span id="msgAdd"></span></div>
         </div>
         <div class="row">
             <div class="col-auto"><label for="name" class="col-form-label">이름</label></div>
@@ -58,7 +58,7 @@
         </div>
         <div class="row">
             <div class="col-auto" ><label class="col-form-label">휴대전화</label></div>
-                <div class="col-auto"><select class="form-select form-select-sm rounded" aria-label="phone" id="mobile1" fw-filter="isNumber&amp;isFill" style="width: 73px; height: 38px; font-size: 16px">
+                <div class="col-auto"><select class="form-select form-select-sm rounded" aria-label="mobile1" id="mobile1" fw-filter="isNumber&amp;isFill" style="width: 73px; height: 38px; font-size: 16px">
                     <option value="010">010</option>
                     <option value="011">011</option>
                     <option value="016">016</option>
@@ -67,7 +67,7 @@
                     <option value="019">019</option>
                 </select>
                 </div>
-            <div class="col-auto"><input class="form-control" id="mobile2" name="mobile2" minlength="7" maxlength="8" fw-filter="isNumber&amp;isFill" type="text" style="width: 114px; margin-left: -12px"><span id="msgNum"></span></div>
+            <div class="col-auto"><input class="form-control" id="mobile2" minlength="7" maxlength="8" fw-filter="isNumber&amp;isFill" type="text" style="width: 114px; margin-left: -12px"><span id="msgNum"></span></div>
         </div>
         <div class="row">
             <div class="col-auto"><label for="email" class="col-form-label">이메일</label></div>
@@ -75,10 +75,12 @@
         </div>
         <div class="row">
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary" id="joinbtn"><i class="bi bi-check"></i> 입력완료</button>
+                <button type="button" class="btn btn-primary" id="joinbtn"><i class="bi bi-check"></i> 입력완료</button>
                 <button type="reset" class="btn btn-danger"><i class="bi bi-arrow-repeat"></i> 다시입력</button></div>
         </div>
+    <input type="hidden" name="phone" id="phone">
     </form>
+
 </main>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -268,9 +270,7 @@
             emailInput.focus();
             return false;
         } else {
-            joinfrm.method = 'post';
-            joinfrm.action = 'http://127.0.0.1:8000/join';
-            return true; // 작성한 데이터를 서버로 요청
+            return true;
         }
     };
 
@@ -337,112 +337,116 @@
 </script>
 
 
-<!--<script>-->
 
-<!--    let msg1 = document.querySelector('#msg1');-->
-<!--    let msg2 = document.querySelector('#msg2');-->
-<!--    let msg3 = document.querySelector('#msg3');-->
-<!--    let msg4 = document.querySelector('#msg4');-->
+<script>
+
+//    let msg1 = document.querySelector('#msg1');
+//    let msg2 = document.querySelector('#msg2');
+//    let msg3 = document.querySelector('#msg3');
+//    let msg4 = document.querySelector('#msg4');
+//
+//
+//    let useridInput = document.querySelector('#userid');
+//    let passwdInput = document.querySelector('#passwd');
+//    let repwdInput = document.querySelector('#repwd');
+//    let nameInput = document.querySelector('#name');
+//    let joinfrm = document.joinfrm;
+//
+//    msg1.previousElementSibling.style.border = '1px solid black'; // 초기화
+//    msg2.previousElementSibling.style.border = '1px solid black'; // 초기화
+//    msg3.previousElementSibling.style.border = '1px solid black'; // 초기화
+//    msg4.previousElementSibling.style.border = '1px solid black'; // 초기화
+//
+//    let showMessage = (element, message) => {
+//        element.textContent = message;
+//        element.style.color = 'red'; // 메시지를 빨간색으로 강조
+//        element.previousElementSibling.style.border = '1px solid red'; // 입력 필드 강조
+//    };
+//
+//    // 입력 필드 초기화 함수
+//    let resetField = (element) => {
+//        element.style.border = '1px solid black'; // 입력 필드 초기화
+//        let messageSpan = element.nextElementSibling;
+//        if (messageSpan) messageSpan.textContent = ''; // 해당 입력 필드와 연관된 메시지 초기화
+//    };
+//
+//
+//    // 이벤트 핸들러 등록
+//    useridInput.addEventListener('blur', () => { checkuid(useridInput.value); });
+//    passwdInput.addEventListener('blur', () => { checkpwd(passwdInput.value); });
+//    repwdInput.addEventListener('blur', () => { checkrepwd(repwdInput.value); });
+//
+//
+//    let checkForm = () => {
+//        resetField(useridInput);
+//        resetField(passwdInput);
+//        resetField(nameInput);
+//
+//        if (useridInput.value === '') {
+//            showMessage(msg1, '아이디를 입력하세요!!');
+//            useridInput.style.border = '1px solid red';
+//            useridInput.focus();
+//            return false;
+//        } else if (passwdInput.value === '') {
+//            showMessage(msg2, '비밀번호를 입력하세요!!');
+//            passwdInput.style.border = '1px solid red';
+//            passwdInput.focus();
+//            return false;
+//        } else if (repwdInput.value !== passwdInput.value || repwdInput.value === '') {
+//            showMessage(msg3, '비밀번호를 확인하세요!!');
+//            repwdInput.style.border = '1px solid red';
+//            repwdInput.focus();
+//            return false;
+//        } else if (nameInput.value === '') {
+//            showMessage(msg4, '이름을 입력하세요!!');
+//            nameInput.style.border = '1px solid red';
+//            nameInput.focus();
+//            return false;
+//        } else {
+//            joinfrm.method = 'post';
+//            joinfrm.action = 'server/join';
+//            return true; // 작성한 데이터를 서버로 요청
+//        }
+//    };
+//
+//    let checkuid = () => {
+//        let uid = useridInput.value;
+//        let re = /^[a-z]+[a-z0-9]{4,15}$/g;
+//        let result = re.test(uid) ? '' : '아이디를 다시 입력해주세요.';
+//        showMessage(msg1, result);
+//    };
+//
+//    let checkpwd = () => {
+//        let pwd = passwdInput.value;
+//        let re = /^[a-z]+[a-z0-9]{4,15}$/g;
+//        let result = re.test(pwd) ? '' : '비밀번호를 다시 입력해주세요.';
+//        showMessage(msg2, result);
+//    };
+//
+//    let checkrepwd = () => {
+//        let result = repwdInput.value === passwdInput.value ? '' : '비밀번호가 일치하지 않습니다.';
+//        showMessage(msg3, result);
+//    };
+
+</script>
 
 
-<!--    let useridInput = document.querySelector('#userid');-->
-<!--    let passwdInput = document.querySelector('#passwd');-->
-<!--    let repwdInput = document.querySelector('#repwd');-->
-<!--    let nameInput = document.querySelector('#name');-->
-<!--    let joinfrm = document.joinfrm;-->
-
-<!--    msg1.previousElementSibling.style.border = '1px solid black'; // 초기화-->
-<!--    msg2.previousElementSibling.style.border = '1px solid black'; // 초기화-->
-<!--    msg3.previousElementSibling.style.border = '1px solid black'; // 초기화-->
-<!--    msg4.previousElementSibling.style.border = '1px solid black'; // 초기화-->
-
-<!--    let showMessage = (element, message) => {-->
-<!--        element.textContent = message;-->
-<!--        element.style.color = 'red'; // 메시지를 빨간색으로 강조-->
-<!--        element.previousElementSibling.style.border = '1px solid red'; // 입력 필드 강조-->
-<!--    };-->
-
-<!--    // 입력 필드 초기화 함수-->
-<!--    let resetField = (element) => {-->
-<!--        element.style.border = '1px solid black'; // 입력 필드 초기화-->
-<!--        let messageSpan = element.nextElementSibling;-->
-<!--        if (messageSpan) messageSpan.textContent = ''; // 해당 입력 필드와 연관된 메시지 초기화-->
-<!--    };-->
 
 
-<!--    // 이벤트 핸들러 등록-->
-<!--    useridInput.addEventListener('blur', () => { checkuid(useridInput.value); });-->
-<!--    passwdInput.addEventListener('blur', () => { checkpwd(passwdInput.value); });-->
-<!--    repwdInput.addEventListener('blur', () => { checkrepwd(repwdInput.value); });-->
-
-
-<!--    let checkForm = () => {-->
-<!--        resetField(useridInput);-->
-<!--        resetField(passwdInput);-->
-<!--        resetField(nameInput);-->
-
-<!--        if (useridInput.value === '') {-->
-<!--            showMessage(msg1, '아이디를 입력하세요!!');-->
-<!--            useridInput.style.border = '1px solid red';-->
-<!--            useridInput.focus();-->
-<!--            return false;-->
-<!--        } else if (passwdInput.value === '') {-->
-<!--            showMessage(msg2, '비밀번호를 입력하세요!!');-->
-<!--            passwdInput.style.border = '1px solid red';-->
-<!--            passwdInput.focus();-->
-<!--            return false;-->
-<!--        } else if (repwdInput.value !== passwdInput.value || repwdInput.value === '') {-->
-<!--            showMessage(msg3, '비밀번호를 확인하세요!!');-->
-<!--            repwdInput.style.border = '1px solid red';-->
-<!--            repwdInput.focus();-->
-<!--            return false;-->
-<!--        } else if (nameInput.value === '') {-->
-<!--            showMessage(msg4, '이름을 입력하세요!!');-->
-<!--            nameInput.style.border = '1px solid red';-->
-<!--            nameInput.focus();-->
-<!--            return false;-->
-<!--        } else {-->
-<!--            joinfrm.method = 'post';-->
-<!--            joinfrm.action = 'server/join';-->
-<!--            return true; // 작성한 데이터를 서버로 요청-->
-<!--        }-->
-<!--    };-->
-
-<!--    let checkuid = () => {-->
-<!--        let uid = useridInput.value;-->
-<!--        let re = /^[a-z]+[a-z0-9]{4,15}$/g;-->
-<!--        let result = re.test(uid) ? '' : '아이디를 다시 입력해주세요.';-->
-<!--        showMessage(msg1, result);-->
-<!--    };-->
-
-<!--    let checkpwd = () => {-->
-<!--        let pwd = passwdInput.value;-->
-<!--        let re = /^[a-z]+[a-z0-9]{4,15}$/g;-->
-<!--        let result = re.test(pwd) ? '' : '비밀번호를 다시 입력해주세요.';-->
-<!--        showMessage(msg2, result);-->
-<!--    };-->
-
-<!--    let checkrepwd = () => {-->
-<!--        let result = repwdInput.value === passwdInput.value ? '' : '비밀번호가 일치하지 않습니다.';-->
-<!--        showMessage(msg3, result);-->
-<!--    };-->
-
-<!--</script>-->
-
-
-
-
-<!--<script>-->
-<!--    useridInput.addEventListener('blur', checkuid);-->
-<!--    passwdInput.addEventListener('blur', checkpwd);-->
-<!--    repwdInput.addEventListener('blur', checkrepwd);-->
-<!--</script>-->
+<script>
+    // useridInput.addEventListener('blur', checkuid);
+    // passwdInput.addEventListener('blur', checkpwd);
+    // repwdInput.addEventListener('blur', checkrepwd);
+</script>
 
 
 <script>
     let joinbtn = document.querySelector('#joinbtn');
-    let joinfrm = document.joinfrm;
+    joinfrm = document.joinfrm;
     joinbtn.addEventListener('click', () => {
+
+        if (!checkForm()) {return;}  // checkForm 에서 넘어온게 true 일 경우에 작동
+
         // 폼에 입력된 데이터를 초기화함
         const formData = new FormData(joinfrm);
 
@@ -452,6 +456,10 @@
             jsondata[key] = val;
         });     // 작성된 데이터를 json 형태로 저장함
         // ajax를 이용해서 서버로 전송하고 결과 받음
+
+        // delete jsondata['mobile2']
+        // console.log(jsondata);
+
         fetch('http://127.0.0.1:8000/join', {
             method: 'POST',                     // 데이터 전송방식
             headers: {
@@ -473,81 +481,81 @@
 
 </script>
 
-<!--<script>-->
-<!--    let msg1 = document.querySelector('#msg1');-->
-<!--    let msg2 = document.querySelector('#msg2');-->
-<!--    let msg3 = document.querySelector('#msg3');-->
-<!--    let userid = document.querySelector('#userid');-->
-<!--    let passwd = document.querySelector('#passwd');-->
-<!--    let repwd = document.querySelector('#repwd');-->
+<script>
+    // let msg1 = document.querySelector('#msg1');
+    // let msg2 = document.querySelector('#msg2');
+    // let msg3 = document.querySelector('#msg3');
+    // let userid = document.querySelector('#userid');
+    // let passwd = document.querySelector('#passwd');
+    // let repwd = document.querySelector('#repwd');
+    //
+    //
+    //
+    // // let joinfrm = document.joinfrm;
+    // //
+    // // let checkform = () => {
+    // //     msg1.textContent = ''; // 초기화
+    // //     msg2.textContent = ''; // 초기화
+    // //     msg3.textContent = ''; // 초기화
+    // //     joinfrm.userid.style.border = '1px solid black'; // 초기화
+    // //     joinfrm.passwd.style.border = '1px solid black'; // 초기화
+    // //     joinfrm.name.style.border = '1px solid black'; // 초기화
+    //
+    //
+    // // let phone = document.querySelector('#phone');
+    // // let age = document.querySelector('#age');
+    //
+    //
+    // // msg에 출력
+    // let checkuid = (uid) => {
+    //     let result = '아이디를 다시 입력해주세요.';        let re = /^[a-z]+[a-z0-9]{4,15}$/g;   // 정규표현식이용 시작은 알파벳, 끝도 알파벳
+    //     // 아이디는 영문자로 시작하는 5~16자 영문자 또는 숫자이어야 합니다
+    //     // 아이디가 제대로 입력되었는지 체크
+    //     if (re.test(uid)) result = '';
+    //     msg1.textContent = result;   // msg에 텍스트컨텐츠를 추가한다.
+    // }
+    //
+    // // 이벤트 핸들러 등록
+    // userid.addEventListener('blur', () => { checkuid(userid.value); });
+    // // 포커스가 잡혔다가 풀리는경우 (blur이벤트) 체크하게됨. 탭누르면 포커스가 풀림
+    //
+    //
+    // let checkpwd = (pwd) => {
+    //     let result = '비밀번호를 다시 입력해주세요.';
+    //     let re = /^[a-z]+[a-z0-9]{4,15}$/g;   // 정규표현식이용 시작은 알파벳, 끝도 알파벳
+    //     // 아이디가 제대로 입력되었는지 체크
+    //     if (re.test(pwd)) result = '';
+    //     msg2.textContent = result;
+    // }
+    //
+    //
+    // // 이벤트 핸들러 등록
+    // passwd.addEventListener('blur', () => { checkpwd(passwd.value); });
+    // // 포커스가 잡혔다가 풀리는경우 (blur이벤트) 체크하게됨. 탭누르면 포커스가 풀림
+    //
+    //
+    // let checkrepwd = (repwd) => {
+    //     let result = '비밀번호가 일치하지 않습니다.';
+    //     // 비밀번호가 동일한지 체크
+    //     if (repwd === passwd.value) result = '';
+    //     msg3.textContent = result;
+    // }
+    //
+    // // 이벤트 핸들러 등록
+    // repwd.addEventListener('blur', () => { checkrepwd(repwd.value); });
+    // //
+    // // // 전화번호가 제대로 입력되었는지 체크하기
+    // // // -> 010, 011, 012, 015, 016, 018, 019로 시작
+    // // let checkphone = (phone) => {
+    // //     let result = '전화번호를 다시 입력하세요.';
+    // //     let re = /^01[0125689]-[0-9]{3,4}-[0-9]{4}/;
+    // //     if (re.test(phone)) result = ' Valid PhoneNumber Submitted!';
+    // //     msg.textContent = result;
+    // // }
+    // //
+    // // phone.addEventListener('blur', () => { checkphone(phone.value); });
 
-
-
-<!--    // let joinfrm = document.joinfrm;-->
-<!--    //-->
-<!--    // let checkform = () => {-->
-<!--    //     msg1.textContent = ''; // 초기화-->
-<!--    //     msg2.textContent = ''; // 초기화-->
-<!--    //     msg3.textContent = ''; // 초기화-->
-<!--    //     joinfrm.userid.style.border = '1px solid black'; // 초기화-->
-<!--    //     joinfrm.passwd.style.border = '1px solid black'; // 초기화-->
-<!--    //     joinfrm.name.style.border = '1px solid black'; // 초기화-->
-
-
-<!--    // let phone = document.querySelector('#phone');-->
-<!--    // let age = document.querySelector('#age');-->
-
-
-<!--    // msg에 출력-->
-<!--    let checkuid = (uid) => {-->
-<!--        let result = '아이디를 다시 입력해주세요.';        let re = /^[a-z]+[a-z0-9]{4,15}$/g;   // 정규표현식이용 시작은 알파벳, 끝도 알파벳-->
-<!--        // 아이디는 영문자로 시작하는 5~16자 영문자 또는 숫자이어야 합니다-->
-<!--        // 아이디가 제대로 입력되었는지 체크-->
-<!--        if (re.test(uid)) result = '';-->
-<!--        msg1.textContent = result;   // msg에 텍스트컨텐츠를 추가한다.-->
-<!--    }-->
-
-<!--    // 이벤트 핸들러 등록-->
-<!--    userid.addEventListener('blur', () => { checkuid(userid.value); });-->
-<!--    // 포커스가 잡혔다가 풀리는경우 (blur이벤트) 체크하게됨. 탭누르면 포커스가 풀림-->
-
-
-<!--    let checkpwd = (pwd) => {-->
-<!--        let result = '비밀번호를 다시 입력해주세요.';-->
-<!--        let re = /^[a-z]+[a-z0-9]{4,15}$/g;   // 정규표현식이용 시작은 알파벳, 끝도 알파벳-->
-<!--        // 아이디가 제대로 입력되었는지 체크-->
-<!--        if (re.test(pwd)) result = '';-->
-<!--        msg2.textContent = result;-->
-<!--    }-->
-
-
-<!--    // 이벤트 핸들러 등록-->
-<!--    passwd.addEventListener('blur', () => { checkpwd(passwd.value); });-->
-<!--    // 포커스가 잡혔다가 풀리는경우 (blur이벤트) 체크하게됨. 탭누르면 포커스가 풀림-->
-
-
-<!--    let checkrepwd = (repwd) => {-->
-<!--        let result = '비밀번호가 일치하지 않습니다.';-->
-<!--        // 비밀번호가 동일한지 체크-->
-<!--        if (repwd === passwd.value) result = '';-->
-<!--        msg3.textContent = result;-->
-<!--    }-->
-
-<!--    // 이벤트 핸들러 등록-->
-<!--    repwd.addEventListener('blur', () => { checkrepwd(repwd.value); });-->
-<!--    //-->
-<!--    // // 전화번호가 제대로 입력되었는지 체크하기-->
-<!--    // // -> 010, 011, 012, 015, 016, 018, 019로 시작-->
-<!--    // let checkphone = (phone) => {-->
-<!--    //     let result = '전화번호를 다시 입력하세요.';-->
-<!--    //     let re = /^01[0125689]-[0-9]{3,4}-[0-9]{4}/;-->
-<!--    //     if (re.test(phone)) result = ' Valid PhoneNumber Submitted!';-->
-<!--    //     msg.textContent = result;-->
-<!--    // }-->
-<!--    //-->
-<!--    // phone.addEventListener('blur', () => { checkphone(phone.value); });-->
-
-<!--</script>-->
+</script>
 
 
 {% endblock %}
